@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NifaTube — Learn &amp; Watch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+/* ── Variables ──────────────────────────────────────────────────────── */
+:root {
+  --bg:       #0f0f0f;
+  --bg2:      #181818;
+  --bg3:      #212121;
+  --border:   rgba(255,255,255,0.08);
+  --red:      #ff0033;
+  --red-dim:  #cc0022;
+  --text:     #f1f1f1;
+  --text-2:   #aaaaaa;
+  --text-3:   #717171;
+  --header-h: 56px;
+  --sidebar-w:72px;
+  --font:     'Plus Jakarta Sans', sans-serif;
+  --radius:   10px;
+  --radius-sm:6px;
+  --trans:    160ms cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── Reset ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--font); }
+img { display: block; }
+
+/* ── Base ───────────────────────────────────────────────────────────── */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  padding-top: var(--header-h);
+  padding-left: var(--sidebar-w);
+  min-height: 100dvh;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════════════════════════════ */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 200;
+  gap: 1rem;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 160px;
+}
+.hamburger {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: background var(--trans);
+}
+.hamburger:hover { background: var(--bg3); }
+.hamburger span {
+  width: 20px; height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  display: block;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.logo-mark {
+  background: var(--red);
+  color: white;
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+.logo-text { color: var(--text); }
+
+/* Search */
+.search-wrap {
+  flex: 1;
+  max-width: 560px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.search-input {
+  flex: 1;
+  height: 40px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 20px 0 0 20px;
+  padding: 0 16px;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--trans), background var(--trans);
+}
+.search-input::placeholder { color: var(--text-3); }
+.search-input:focus {
+  border-color: rgba(255,255,255,0.2);
+  background: var(--bg3);
+}
+.search-btn {
+  height: 40px;
+  width: 64px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-left: none;
+  border-radius: 0 20px 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--trans);
+}
+.search-btn:hover { background: #3f3f3f; }
+.search-btn svg { color: var(--text-2); }
+.voice-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  transition: background var(--trans);
+  flex-shrink: 0;
+}
+.voice-btn:hover { background: #3f3f3f; }
+
+/* Right controls */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.icon-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background var(--trans);
+  color: var(--text);
+}
+.icon-btn:hover { background: var(--bg3); }
+.notif-badge {
+  position: absolute;
+  top: 4px; right: 4px;
+  background: var(--red);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  min-width: 16px; height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  pointer-events: none;
+}
+.avatar-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: border-color var(--trans);
+  flex-shrink: 0;
+}
+.avatar-btn:hover { border-color: var(--red); }
+.avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════════════════════════ */
+.sidebar {
+  position: fixed;
+  top: var(--header-h);
+  left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  z-index: 150;
+  padding: 8px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.sidebar-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 68px;
+  gap: 5px;
+  border-radius: var(--radius-sm);
+  margin: 0 4px;
+  cursor: pointer;
+  transition: background var(--trans);
+  color: var(--text);
+  text-decoration: none;
+}
+.sidebar-link:hover { background: var(--bg3); }
+.sidebar-link.active { background: var(--bg3); }
+.sidebar-link svg { flex-shrink: 0; }
+.sidebar-label {
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-2);
+}
+.sidebar-link.active .sidebar-label { color: var(--text); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════════════════════════════════════════ */
+.main {
+  padding: 20px 20px 40px;
+}
+
+/* Filter chips */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.filter-row::-webkit-scrollbar { display: none; }
+.chip {
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--trans), color var(--trans), transform var(--trans);
+  flex-shrink: 0;
+}
+.chip:hover { transform: translateY(-1px); }
+.chip.inactive {
+  background: var(--bg3);
+  color: var(--text);
+}
+.chip.inactive:hover { background: #3a3a3a; }
+
+/* ── Video grid ─────────────────────────────────────────────────────── */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem 1.2rem;
+}
+
+/* ── Video card ─────────────────────────────────────────────────────── */
+.video-card {
+  display: block;
+  cursor: pointer;
+  animation: cardIn 0.4s cubic-bezier(0.34,1.2,0.64,1) both;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Thumbnail */
+.thumb-wrap {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg3);
+  aspect-ratio: 16/9;
+}
+.thumb-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease, filter 0.25s ease;
+}
+.video-card:hover .thumb-wrap img {
+  transform: scale(1.04);
+  filter: brightness(0.85);
+}
+.duration {
+  position: absolute;
+  bottom: 7px; right: 8px;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+}
+
+/* Progress bar (fake, for learning context) */
+.progress-bar {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 3px;
+  background: var(--red);
+  border-radius: 0;
+  pointer-events: none;
+}
+
+/* Watch later on hover */
+.watch-later {
+  position: absolute;
+  top: 7px; right: 8px;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.75);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--trans);
+  pointer-events: none;
+}
+.video-card:hover .watch-later {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Card body */
+.card-body {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 0 10px;
+  padding-top: 10px;
+}
+.channel-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--bg3);
+  grid-row: span 3;
+  margin-top: 2px;
+}
+.channel-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.card-title {
+  font-size: 0.87rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+.card-channel {
+  font-size: 0.76rem;
+  color: var(--text-2);
+  font-weight: 500;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.verified-badge {
+  width: 13px; height: 13px;
+  background: var(--text-3);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.verified-badge svg { width: 8px; height: 8px; }
+.card-meta {
+  font-size: 0.74rem;
+  color: var(--text-3);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  body { padding-left: 0; }
+  .sidebar { display: none; }
+  .video-grid { grid-template-columns: 1fr; }
+  .brand { min-width: auto; }
+}
+@media (min-width: 641px) and (max-width: 900px) {
+  .video-grid { grid-template-columns: repeat(2, 1fr); }
+}
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══════════════════════════════════════════════════════ -->
+<header class="header">
+
+  <!-- Brand -->
+  <div class="brand">
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="logo" href="#">
+      <span class="logo-mark">N</span>
+      <span class="logo-text">Nifa</span>
+    </a>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <input class="search-input" type="search" placeholder="Search videos…" aria-label="Search">
+    <button class="search-btn" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+    </button>
+    <button class="voice-btn" aria-label="Voice search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Right icons -->
+  <div class="header-right">
+    <button class="icon-btn" aria-label="Create">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+      </svg>
+    </button>
+    <button class="icon-btn" aria-label="Apps">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+    </button>
+    <button class="icon-btn" aria-label="Notifications">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+      <span class="notif-badge">3</span>
+    </button>
+    <button class="avatar-btn" aria-label="Profile">
+      <img src="https://yt3.ggpht.com/yti/ANjgQV8dgOunTq80jtQVssCEpjl8cmDJYiJNPztuM_FTCYM=s88-c-k-c0x00ffffff-no-rj" alt="Nifa">
+    </button>
+  </div>
+</header>
+
+<!-- ═══ SIDEBAR ══════════════════════════════════════════════════════ -->
+<nav class="sidebar" aria-label="Navigation">
+  <a class="sidebar-link active" href="#" aria-label="Home">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <span class="sidebar-label">Home</span>
+  </a>
+  <a class="sidebar-link" href="#" aria-label="Explore">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+    </svg>
+    <span class="sidebar-label">Explore</span>
+  </a>
+  <a class="sidebar-link" href="#" aria-label="Subscriptions">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+      <polyline points="22,6 12,13 2,6"/>
+    </svg>
+    <span class="sidebar-label">Subscriptions</span>
+  </a>
+  <a class="sidebar-link" href="#" aria-label="Library">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </svg>
+    <span class="sidebar-label">Library</span>
+  </a>
+  <a class="sidebar-link" href="#" aria-label="History">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"/>
+    </svg>
+    <span class="sidebar-label">History</span>
+  </a>
+  <a class="sidebar-link" href="#" aria-label="Watch Later">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+    </svg>
+    <span class="sidebar-label">Watch Later</span>
+  </a>
+</nav>
+
+<!-- ═══ MAIN ══════════════════════════════════════════════════════════ -->
+<main class="main">
+
+  <!-- Filter chips -->
+  <div class="filter-row" role="list" aria-label="Filter categories">
+    <button class="chip" role="listitem">All</button>
+    <button class="chip inactive" role="listitem">Genshin Impact</button>
+    <button class="chip inactive" role="listitem">Game Trailers</button>
+    <button class="chip inactive" role="listitem">Anime</button>
+    <button class="chip inactive" role="listitem">Character Demos</button>
+    <button class="chip inactive" role="listitem">Story Teasers</button>
+    <button class="chip inactive" role="listitem">Music</button>
+    <button class="chip inactive" role="listitem">RPG</button>
+    <button class="chip inactive" role="listitem">Recently Uploaded</button>
+  </div>
+
+  <!-- Video Grid -->
+  <div class="video-grid" id="video-grid"></div>
+
+</main>
+
+<script>
+const VIDEOS = [
+  {
+    url:     'https://www.youtube.com/watch?v=VDBIuROVSWk',
+    thumb:   'https://i.ytimg.com/vi/VDBIuROVSWk/hq720.jpg',
+    title:   'Cutscene Animation: "Song of the Light, Fire of the Night" | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '139K', ago: '2 days ago', duration: '2:20', progress: 0
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=Q4JRtFDrP5w',
+    thumb:   'https://i.ytimg.com/vi/Q4JRtFDrP5w/hq720.jpg',
+    title:   'Collected Miscellany — "Mavuika: Pilgrimage of the Blazing Sun" | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '568K', ago: '9 days ago', duration: '6:00', progress: 45
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=jqFI2oHC3Ig',
+    thumb:   'https://i.ytimg.com/vi/jqFI2oHC3Ig/hq720.jpg',
+    title:   'Story Teaser: Honor | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '345K', ago: '1 day ago', duration: '2:42', progress: 0
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=9ZlsjVeJEcg',
+    thumb:   'https://i.ytimg.com/vi/9ZlsjVeJEcg/hqdefault.jpg',
+    title:   'Collected Miscellany — "Ororon: Unraveling Mysteries in the Shadows" | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '316K', ago: '1 month ago', duration: '5:09', progress: 80
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=TmaAOV4SJNQ',
+    thumb:   'https://i.ytimg.com/vi/TmaAOV4SJNQ/hq720.jpg',
+    title:   'Teyvat Chapter Interlude Teaser: "Farewell" | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '138K', ago: '4 days ago', duration: '4:19', progress: 0
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=2o2d7Nr_SN8',
+    thumb:   'https://i.ytimg.com/vi/2o2d7Nr_SN8/hq720.jpg',
+    title:   '"Memories of This Life" Animated Short | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '1.1M', ago: '4 days ago', duration: '1:49', progress: 100
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=TAlKhARUcoY',
+    thumb:   'https://i.ytimg.com/vi/TAlKhARUcoY/hq720.jpg',
+    title:   'Teyvat Chapter Storyline Preview: Travail | Genshin Impact (Contains spoilers)',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '23M', ago: '4 years ago', duration: '4:18', progress: 0
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=mvrW4aKwAXw',
+    thumb:   'https://i.ytimg.com/vi/mvrW4aKwAXw/hq720.jpg',
+    title:   'Character Demo — "Raiden Shogun: Judgment of Euthymia" | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '19M', ago: '3 years ago', duration: '2:42', progress: 60
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=1Ip43DfbkUw',
+    thumb:   'https://i.ytimg.com/vi/1Ip43DfbkUw/hq720.jpg',
+    title:   'Version 4.2 "Masquerade of the Guilty" Trailer | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '3.6M', ago: '1 year ago', duration: '4:28', progress: 0
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=WIxkKExpu94',
+    thumb:   'https://i.ytimg.com/vi/WIxkKExpu94/hq720.jpg',
+    title:   'Version 3.0 "The Morn a Thousand Roses Brings" Trailer | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '6.1M', ago: '2 years ago', duration: '6:05', progress: 0
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=EEGh9J0TH2E',
+    thumb:   'https://i.ytimg.com/vi/EEGh9J0TH2E/hq720.jpg',
+    title:   'Story Teaser: Lost Legacies in the Sand | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '2.3M', ago: '2 years ago', duration: '2:39', progress: 0
+  },
+  {
+    url:     'https://www.youtube.com/watch?v=_qTNkcy_7Y4',
+    thumb:   'https://i.ytimg.com/vi/_qTNkcy_7Y4/hq720.jpg',
+    title:   'Story Teaser: The Solitary Pursuit of Lightning | Genshin Impact',
+    channel: 'Genshin Impact',
+    avatar:  'https://yt3.ggpht.com/XGgHnjou-u1xJBoDUeUp0f6awndimgVngM-03r1uF-l7jKV1gXxJ72kDIG3HYd240aTmNolNthE=s68-c-k-c0x00ffffff-no-rj',
+    views:   '3.4M', ago: '3 years ago', duration: '2:04', progress: 0
+  },
+];
+
+// Verified checkmark SVG
+const CHECK = `<svg viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
+
+function renderCards() {
+  const grid = document.getElementById('video-grid');
+  grid.innerHTML = '';
+  VIDEOS.forEach((v, i) => {
+    const a = document.createElement('a');
+    a.className = 'video-card';
+    a.href = v.url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.style.animationDelay = `${i * 45}ms`;
+
+    a.innerHTML = `
+      <div class="thumb-wrap">
+        <img src="${v.thumb}" alt="${v.title}" loading="lazy">
+        ${v.progress > 0 && v.progress < 100 ? `<div class="progress-bar" style="width:${v.progress}%"></div>` : ''}
+        <span class="duration">${v.duration}</span>
+        <button class="watch-later" title="Watch later" onclick="event.preventDefault()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="channel-avatar">
+          <img src="${v.avatar}" alt="${v.channel}" loading="lazy">
+        </div>
+        <p class="card-title">${v.title}</p>
+        <div class="card-channel">
+          ${v.channel}
+          <span class="verified-badge">${CHECK}</span>
+        </div>
+        <p class="card-meta">${v.views} views · ${v.ago}</p>
+      </div>`;
+
+    grid.appendChild(a);
+  });
+}
+
+// Filter chip interactivity
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.add('inactive'));
+    chip.classList.remove('inactive');
+  });
+});
+
+// Sidebar active state
+document.querySelectorAll('.sidebar-link').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+
+renderCards();
+</script>
+</body>
+</html>
